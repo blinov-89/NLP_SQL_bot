@@ -1,0 +1,106 @@
+Question,Answer
+sport Покажи все записи,select * from sport s 
+sport Сколько записей в таблице,select count(*) from sport s 
+sport Сколько уникальных подсекций,select count(distinct subsection) from sport s 
+sport Сколько укниальных соревнований,select count(distinct title) from sport s
+sport Какие уникальные подсекции,select distinct subsection from sport s
+sport Какие уникальные соревнования,select distinct title from sport s
+sport Сколько в серднем участников соревнований,select avg(participants) from sport s
+sport Какое минимальное количетсво участников в соревнованиях,select max(participants) from sport s
+sport Какое макисмальное количество участников соревнований,select min(participants) from sport s
+sport Какие мероприятия были с макисмальным количеством участнков,select * from sport s2 where participants = (select max(participants) from sport s) 
+sport Какие мероприятия были с минимальным количествои участников,select * from sport s2 where participants = (select min(participants) from sport s)
+sport Какая минимальная дата начала соревнований,select min(start) from sport s
+sport Какая макисмальная дата начала соревнований,select max(start) from sport s
+sport Сколько соревнований проходит каждый год,"select date_part('year', ""start"") y, count(*) from sport s group by y"
+sport Самый популярный адрес для организации соревнований,"select address, count(*) c from sport s group by address order by c desc limit 1"
+sport Топ-10 популярных адресов для организации соревнований,"select address, count(*) c from sport s group by address order by c desc limit 10"
+sport Какие адреса где были соревнования лишь один раз,"select * from (select address, count(*) c from sport s group by address) s  where c = 1"
+sport Сколько дней идут самые длинные соревнования,"select max(stop - ""start"")  from sport s "
+sport Какие самые продолжительные соревнования,"select *, (stop - ""start"") as l from sport s order by l desc limit 1"
+sport Какие названия соревнований существуют,select distinct title from sport s
+sport Какие виды спорта существуют,select distinct section from sport s 
+sport Сколько мероприятий проходит для каждого вида спорта,"select section, count(*) from sport s group by ""section"" "
+sport Вид спорта с наибольшем количеством соревнований,"select section, count(*) c from sport s group by ""section"" order by c desc limit 1"
+sport Вид спорта с самым большим количеством участников сумарно,"select section, sum(participants) c from sport s group by ""section"" order by c desc limit 1"
+sport Вид спорта с самым большим количеством участников в среднем,"select section, avg(participants) c from sport s group by ""section"" order by c desc limit 1"
+sport Самый популярный месяц в году для проведения соревнований,"select date_part('month', ""start"") as m, count(*) as c from sport s group by m order by c desc limit 1"
+sport Сколько соревнований проходит каждый месяц,"select date_part('month', ""start"")||'-'||date_part('year', ""start"") as m, count(*) from sport s group by m"
+sport Сколько кубков проходит каждый год,"select date_part('year', ""start"") as m, count(*) as c from sport s2  where title like '%кубок%' group by m"
+sport Сколько чемпионатов проходит каждый год,"select date_part('year', ""start"") as m, count(*) as c from sport s2  where title like '%чемпионат%' group by m"
+sport Самое редкое название мероприятия,"select title, count(*) as c from sport group by title order by c asc limit 1 "
+sport Самое популярное название мероприятя,"select title, count(*) as c from sport group by title order by c desc limit 1 "
+sport Какие мероприятия проводились не в Росссии,select * from sport s where address not like '%Россия%'
+sport Самая популярная страна кроме Россиии,"select split_part(address, ',', 1) as country, count(*) as c from sport s where address not like '%Россия%' group by country order by c desc limit 1"
+sport Какая самая редкая страна,"select split_part(address, ',', 1) as country, count(*) as c from sport s where address not like '%Россия%' group by country order by c asc limit 1"
+sport Какое самое популярное описание,"select description , count(*) as c from sport group by description order by c desc limit 1 "
+sport Какое самое популярное описание за исключением '-'  и '',"select d, count(*) as c from (select trim(description) as d from sport s where description not in ('-', '')) s group by d order by c desc limit 1"
+sport Какой год с наибольшим количеством мероприятий,"select date_part('year', ""start"") as y, count(*) as c from sport s group by y order by y desc limit 1"
+sport Сколько мероприятий проходит в среднем каждый год,"select avg(c) from (select date_part('year', ""start"") as y, count(*) as c from sport s group by y) s"
+sport Сколько мероприятий проходи в среднем каждый месяц,"select avg(c) from (select date_part('month', ""start"")||'-'||date_part('year', ""start"") as m, count(*) as c from sport s group by m) s"
+sport Какой самый популярный день года для начала соревнований,"select date_part('day', ""start"")||'-'||date_part('month', ""start"") as m, count(*) as c from sport s group by m order by c desc limit 1"
+sport Какой самый популярный день недели для начала соревнований,"select date_part('dow', ""start"") as m, count(*) as c from sport s group by m order by c desc limit 1 "
+sport Какой год с наибольшим количеством мероприятий в России,"select date_part('year', ""start"") as y, count(*) as c from sport s where address like '%Россия%' group by y order by y desc limit 1"
+sport Какой год с наименьшем количеством мероприятий в Росссии,"select date_part('year', ""start"") as y, count(*) as c from sport s where address like '%Россия%' group by y order by y asc limit 1"
+sport Сколько мероприятий прошло в 2015 году,select count(*) from sport s where start between '01-01-2015' and '31-12-2015'
+sport Сколько мероприятий прошло с 2010 по 2015 год,select count(*) from sport s where start between '01-01-2010' and '31-12-2015'
+sport Сколько участников сумарно приняло участие с 2010 по 2015,select sum(participants) from sport s where start between '01-01-2010' and '31-12-2015'
+sport Сколько участников сумарно приняло участие с 2010 по 2015 не России,select sum(participants) from sport s where start between '01-01-2010' and '31-12-2015' and address like '%Россия%'
+sport Сколько участников сумарно приняло участие с 2010 по 2015 в России,select sum(participants) from sport s where start between '01-01-2010' and '31-12-2015' and address not like '%Россия%'
+sport Сколько соревнований проводится 1 января каждого года,"select date_part('year', ""start"") as y, count(*) as c from sport s where date_part('doy', ""start"") = 1  group by y"
+sport Сколько различных мероприятий существует для каждого вида спорта,"select section, count(distinct title) from sport s group by ""section"" "
+sport Самый непопулярный месяц для начала проведения мероприятий,"select date_part('month', ""start"") as m, count(*) as c from sport s group by m order by c asc"
+sport Самый популярный день в году для начала проведеняи мероприятий,"select date_part('doy', ""start"") as m, count(*) as c from sport s group by m order by c desc"
+sport Самый непопулярный день в году для начала проведения мероприятий,"select date_part('doy', ""start"") as m, count(*) as c from sport s group by m order by c asc"
+sport В какой день чаще всего заканчиваются мероприятия,"select date_part('doy', ""stop"") as m, count(*) as c from sport s group by m order by c desc"
+sport В какой день реже всего заканчиваются мероприятия,"select date_part('doy', ""stop"") as m, count(*) as c from sport s group by m order by c asc"
+propuska Сколько записей в таблице,select count(*) from propuska p
+propuska Сколько уникальных пропусков,"select count(distinct p.""Number"") from propuska p"
+propuska Сколько пропусков становится валидными в среднем в день,"select avg(n) from (select count(distinct p.""Number"") as n, validfrom from propuska p group by validfrom )s"
+propuska Максимальное количество начала действия пропусков в день ,"select max(n) from (select count(distinct p.""Number"") as n, validfrom from propuska p group by validfrom )s"
+propuska Минимальное количество начала действия в день пропусков,"select min(n) from (select count(distinct p.""Number"") as n, validfrom from propuska p group by validfrom )s"
+propuska Какие зоны существуют,"select distinct ""Zone"" from propuska p"
+propuska Количество выданных пропусков с зоной МКАД каждый год,"select count(distinct ""Number"") from propuska where ""Zone"" = 'МКАД'"
+propuska Количество выданных пропусков с зоной СК каждый год,"select count(distinct ""Number"") from propuska where ""Zone"" = 'СК'"
+propuska Количество выданных пропусков с зоной ТТК каждый год,"select count(distinct ""Number"") from propuska where ""Zone"" = 'ТТК'"
+propuska Сколько пропусков становится валдиными каждый месяц,"select count(distinct p.""Number"") as n, date_part('year', validfrom) as y, date_part('month', validfrom) as m  from propuska p group by y, m"
+propuska Сколько анулированных уникальных пропусков ,"select count(distinct ""Number"") from propuska p where status = 'Аннулирован'"
+propuska Дни года от макимальным количечством начала валидных пропусков,"select date_part('doy', validfrom) d, count(distinct ""Number"") c from propuska p group by d order by c desc"
+propuska Дни года от  минимальным количеством начала валидных пропусков,"select date_part('doy', validfrom) d, count(distinct ""Number"") c from propuska p group by d order by c asc"
+propuska Самая ранняя дата выдачи пропуска из таблицы,select min(validfrom) from propuska p
+propuska Самая поздная дата выдачи пропуска из таблицы,select max(validfrom) from propuska p
+propuska Количество выданных пропусков,"select count(distinct ""Number"") from propuska where status = 'Выдан'"
+propuska Количество аннулированных пропусков,select count(*) from propuska where status = 'Аннулирован'
+propuska Какие уникальные серии пропусков существуют,select distinct series from propuska p
+propuska Сколько пропусков каждой серии,"select count(*), series from propuska group by series"
+propuska Все пропуска с серией ТТ,select * from propuska p where series = 'ТТ'
+taxi Сколько уникальных лицензий?,select count(distinct LicenseNumber) from taxi
+taxi Какое такси с самым маленьким годом производтсва?,select min(VehicleYear) from taxi
+taxi 5 самых популярных брендов авто,"select VehicleBrand, count(*) as c from taxi group by VehicleBrand ORDER by c desc limit 5"
+taxi 5 самых старых авто в такси,select * from taxi order by VehicleYear ASC limit 5
+taxi 10 компанй с наибольшим количеством лицензий,"select count(distinct BlankNumber) as n, shortName from taxi group by ShortName order by n DESC limit 10"
+taxi Количество действующих лицензий ,select count(distinct blankNumber) from taxi where status = 'Действующее'
+taxi Количество автомобилей текущего года выпуска с действующей лицензией,select count(*) from taxi where status = 'Действующее' and VehicleYear = '2022'
+taxi Какого года выпуска наибольшее количество действующих автомобилей,"select count(distinct BlankNumber) as l, VehicleYear from taxi where status = 'Действующее' GROUP by VehicleYear ORDER by l desc "
+taxi В какую дату выдано большего всего лицензий,"select count(distinct BlankNumber) as l, LicenseDate  from taxi GROUP by LicenseDate ORDER by l desc"
+taxi Сколько ип,select count(distinct ShortName) from taxi where ShortName not like 'ООО%'
+taxi В какую дату чаще всего аннулировали лицензии,"select count(distinct BlankNumber) as l, EditDate from taxi where status = 'Аннулировано' GROUP by EditDate order by l desc"
+taxi Сколько уникальных ИНН,select count(distinct inn) from taxi
+taxi Сколько записей в таблице,select count(*) from taxi
+taxi Количество униакльных автомобильных номеров,select count(distinct VehicleNumber) from taxi
+taxi Количество выданных лицензий на один автомобиль,"select count(distinct LicenseNumber), VehicleNumber from taxi group by VehicleNumber "
+taxi Минимальная дата выдачи лицензии,select min(licensedate) from taxi
+taxi Максимальная дата выдачи лицензии,select max(licensedate) from taxi
+taxi Максимальная дата окончания лицензии,select min(licensedate) from taxi
+taxi Сколько лицензий анулировано,select max(licenseenddate) from taxi
+taxi Сколько уникальных ОГРН,select count(distinct ogrn) from taxi
+taxi Сколько действующих лицензий,select count(distinct blankNumber) from taxi where status = 'Действующее'
+taxi Сколько лицензий выдавалось каждый год,"select date_part('year', licensedate) as m, count(distinct licensenumber) from taxi group by m"
+taxi Максимальное количество выданных лицензий в год,"select max(n) from (select date_part('year', licensedate) as m, count(distinct licensenumber) as n from taxi group by m ) s
+"
+taxi Минимальная количество выданных лицензий в год,"select min(n) from (select date_part('year', licensedate) as m, count(distinct licensenumber) as n from taxi group by m ) s"
+taxi Сколько лицензий выдавалось в месяц в 2021,"select date_part('month', licensedate) as m, count(*) from taxi where date_part('year', licensedate) = '2021' group by m"
+taxi Максимальное количество выданных лицензий в месяц,"select max(n) from (select date_part('year', licensedate) as y, date_part('month', licensedate) as m, count(distinct licensenumber) as n from taxi group by y, m ) s"
+taxi Минимальное колисество выданных лицензий в месяц,"select min(n) from (select date_part('year', licensedate) as y, date_part('month', licensedate) as m, count(distinct licensenumber) as n from taxi group by y, m ) s"
+taxi Сколько ООО,select count(distinct ShortName) from taxi where ShortName like 'ООО%'
+taxi Максимальное количество выданных лицензий на один автомобильный номер,"select max(s.c) from (select count(distinct LicenseNumber) as c, VehicleNumber from taxi group by VehicleNumber  ) as s"
